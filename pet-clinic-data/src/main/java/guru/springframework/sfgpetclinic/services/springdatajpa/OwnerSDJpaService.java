@@ -1,6 +1,5 @@
 package guru.springframework.sfgpetclinic.services.springdatajpa;
 
-import com.sun.javaws.exceptions.FailedDownloadingResourceException;
 import guru.springframework.sfgpetclinic.model.Owner;
 import guru.springframework.sfgpetclinic.repositories.OwnerRepository;
 import guru.springframework.sfgpetclinic.repositories.PetRepository;
