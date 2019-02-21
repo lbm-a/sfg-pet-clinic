@@ -35,12 +35,12 @@ public class PetController {
 
     @ModelAttribute("types")
     public Collection<PetType> populatePetTypes(){
-        return this.petTypeService.findAll();
+        return petTypeService.findAll();
     }
 
     @ModelAttribute("owner")
     public Owner findOwner(@PathVariable("ownerId") Long ownerId){
-        return this.ownerService.findById(ownerId);
+        return ownerService.findById(ownerId);
     }
 
     @InitBinder("owner")
@@ -52,12 +52,14 @@ public class PetController {
     public String initCreationForm(Owner owner, Model model) {
         Pet pet = new Pet();
         owner.getPets().add(pet);
+        pet.setOwner(owner);
         model.addAttribute("pet", pet);
         return VIEWS_PETS_CREATE_OR_UPDATE_FORM;
     }
 
     @PostMapping("/pets/new")
     public String processCreationForm(Owner owner, @Valid Pet pet, BindingResult result, ModelMap model) {
+        pet.setOwner(owner);
         if (StringUtils.hasLength(pet.getName()) && pet.isNew() && owner.getPet(pet.getName(), true) != null){
             result.rejectValue("name", "duplicate", "already exists");
         }
@@ -80,6 +82,7 @@ public class PetController {
 
     @PostMapping("/pets/{petId}/edit")
     public String processUpdateForm(@Valid Pet pet, BindingResult result, Owner owner, Model model) {
+        pet.setOwner(owner);
         if (result.hasErrors()) {
             pet.setOwner(owner);
             model.addAttribute("pet", pet);
